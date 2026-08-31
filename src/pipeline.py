@@ -174,6 +174,9 @@ def transform_data(data: pd.DataFrame) -> pd.DataFrame:
 
     dummies = pd.get_dummies(data[onehot_cols], prefix=onehot_cols, dtype=int)
 
+    print("\n Transformed Data:")
+    print(data[["horsepower", "price", "horsepower_ordinal"]].head())
+
     base_cols = [
         "symboling",
         "normalized-losses",
