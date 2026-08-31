@@ -77,12 +77,21 @@ def clean_data(df: pd.DataFrame) -> pd.DataFrame:
     for col in ["stroke", "horsepower", "price"]:
         data[col] = data[col].fillna(data[col].median())
 
+    cleaned_cols = [
+        "make",
+        "num-of-doors",
+        "horsepower-binned",
+        "stroke",
+        "horsepower",
+        "price",
+    ]
+
+    print("\nColumns cleaned:")
+    for col in cleaned_cols:
+        print(f"- {col}")
+
     rows_after = len(data)
     missing_after = int(data.isna().sum().sum())
-
-    print("\n" + "=" * 60)
-    print("CLEANING SUMMARY")
-    print("=" * 60)
 
     print(f"Rows before cleaning : {rows_before}")
     print(f"Rows after cleaning  : {rows_after}")
