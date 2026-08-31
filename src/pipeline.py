@@ -43,7 +43,7 @@ def inspect_dataset(df: pd.DataFrame) -> None:
 
         if len(values) <= 30:
             print(f"{col}: {values}")
-            
+
 
 def clean_data(df: pd.DataFrame) -> pd.DataFrame:
 
@@ -51,10 +51,10 @@ def clean_data(df: pd.DataFrame) -> pd.DataFrame:
 
     rows_before = len(data)
     missing_before = int(data.isna().sum().sum())
-    
+
     data = data.drop_duplicates().reset_index(drop=True)
     data = data.drop(columns=["transaction_date"])
-    
+
     categorical_cols = [
         "make",
         "aspiration",
@@ -67,27 +67,14 @@ def clean_data(df: pd.DataFrame) -> pd.DataFrame:
         "fuel-system",
         "horsepower-binned",
     ]
-    
+
     for col in categorical_cols:
-        data[col] = (
-            data[col]
-            .astype("string")
-            .str.strip()
-            .str.lower()
-        )
-        
-    for col in [
-        "make",
-        "num-of-doors",
-        "horsepower-binned"
-    ]:
+        data[col] = data[col].astype("string").str.strip().str.lower()
+
+    for col in ["make", "num-of-doors", "horsepower-binned"]:
         data[col] = data[col].fillna(data[col].mode()[0])
-        
-    for col in [
-        "stroke",
-        "horsepower",
-        "price"
-    ]:
+
+    for col in ["stroke", "horsepower", "price"]:
         data[col] = data[col].fillna(data[col].median())
 
     rows_after = len(data)
@@ -119,7 +106,7 @@ def transform_data(data: pd.DataFrame) -> pd.DataFrame:
             0,
             1,
         ],
-        default=np.nan
+        default=np.nan,
     )
 
     data["num-of-cylinders"] = np.select(
@@ -141,12 +128,10 @@ def transform_data(data: pd.DataFrame) -> pd.DataFrame:
             6,
             10,
         ],
-        default=np.nan
+        default=np.nan,
     )
 
-    data["num-of-cylinders"] = (
-        data["num-of-cylinders"] / 10
-    )
+    data["num-of-cylinders"] = data["num-of-cylinders"] / 10
 
     data["horsepower_ordinal"] = np.select(
         [
@@ -159,9 +144,8 @@ def transform_data(data: pd.DataFrame) -> pd.DataFrame:
             1,
             2,
         ],
-        default=np.nan
+        default=np.nan,
     ).astype(np.int64)
-    
 
     scaled_cols = [
         "symboling",
@@ -177,9 +161,7 @@ def transform_data(data: pd.DataFrame) -> pd.DataFrame:
 
     scaler = MinMaxScaler()
 
-    data[scaled_cols] = scaler.fit_transform(
-        data[scaled_cols]
-    )
+    data[scaled_cols] = scaler.fit_transform(data[scaled_cols])
 
     onehot_cols = [
         "body-style",
@@ -190,11 +172,7 @@ def transform_data(data: pd.DataFrame) -> pd.DataFrame:
         "fuel-system",
     ]
 
-    dummies = pd.get_dummies(
-        data[onehot_cols],
-        prefix=onehot_cols,
-        dtype=int
-    )
+    dummies = pd.get_dummies(data[onehot_cols], prefix=onehot_cols, dtype=int)
 
     base_cols = [
         "symboling",
@@ -221,39 +199,26 @@ def transform_data(data: pd.DataFrame) -> pd.DataFrame:
         "horsepower_ordinal",
     ]
 
-    result = pd.concat(
-        [
-            data[base_cols],
-            dummies
-        ],
-        axis=1
-    )
+    result = pd.concat([data[base_cols], dummies], axis=1)
 
-    make_frequency = data["make"].value_counts(
-        normalize=True
-    )
+    make_frequency = data["make"].value_counts(normalize=True)
 
-    result["make_freq"] = data["make"].map(
-        make_frequency
-    )
+    result["make_freq"] = data["make"].map(make_frequency)
 
     return result
+
 
 def save_dataset(df: pd.DataFrame) -> None:
 
     path = "data/processed/automobileEDA_processed.csv"
 
-    df.to_csv(
-        path,
-        index=False
-    )
+    df.to_csv(path, index=False)
 
-    print(
-        f"\nProcessed dataset saved to: {path}"
-    )
+    print(f"\nProcessed dataset saved to: {path}")
+
 
 def run_pipeline() -> None:
-    
+
     df = extract_data()
     inspect_dataset(df)
     cleaned = clean_data(df)
@@ -261,11 +226,8 @@ def run_pipeline() -> None:
     save_dataset(processed)
 
     print(f"Final shape: {processed.shape}")
-    print(
-        f"Missing values: "
-        f"{processed.isna().sum().sum()}"
-    )
-    
+    print(f"Missing values: {processed.isna().sum().sum()}")
+
 
 if __name__ == "__main__":
     run_pipeline()
