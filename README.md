@@ -37,7 +37,7 @@ data-pipeline-assignment/
 └── requirements.txt
 ```
 
-## 4. Hasil Temuan & Permasalahan Yang Ditemukan
+## 4. Kondisi Dataset & Permasalahan Yang Ditemukan
 
 - Dataset memiliki **205 data dan 30 kolom**.
 - Terdapat berbagai tipe data, yaitu `int64`, `float64`, dan `str`.
@@ -187,7 +187,7 @@ Jumlah missing values yang ditemukan pada tahap awal:
 | `horsepower` | 3 |
 | `price` | 3 |
 
-### 5.3.6 Hasil Cleaning
+### 5.4 Hasil Cleaning
 
 Hasil proses cleaning menunjukkan:
 
@@ -410,3 +410,112 @@ result["make_freq"] = data["make"].map(make_frequency)
 Nilai pada `make_freq` menunjukkan frekuensi relatif dari masing-masing kategori `make` dalam dataset.
 
 Metode ini dipilih agar informasi mengenai kategori produsen tetap dipertahankan dalam bentuk numerik tanpa menambahkan banyak kolom seperti pada One-Hot Encoding.
+
+## 7. Jumlah Data Dari Proses Yang Telah Dilakukan
+
+Setelah seluruh proses cleaning dan transformation dijalankan, ukuran dataset mengalami perubahan.
+
+### Perbandingan Dataset
+
+|  #    | Sebelum | Sesudah |
+| ----- | ------: | ------: |
+| Baris |     205 |      30 |
+| Kolom |     201 |      50 |
+
+## 8. Instalasi Depedencies
+
+Pastikan sudah membuat virtual environment terlebih dahulu, jika belum dapat melakukan dengan mengguanakan perintah berikut :
+
+```text
+    python3 -m venv venv
+```
+
+atau
+
+```text
+    python -m venv venv
+```
+
+Kemudian aktifkan virtual environment jika diperlukan dengan perintah berikut :
+
+MacOS / Linux
+
+```text
+    source venv/bin/activate
+```
+
+Windows
+
+```text
+    venv\Scripts\activate
+```
+
+kemudian install dependency dengan perintah berikut :
+
+```text
+    pip3 install -r requirements.txt
+```
+
+atau
+
+```text
+    pip3 install -r requirements.txt
+```
+
+## 10. Menjalankan Pipeline
+
+Dari root project, jalankan perintah berikut:
+
+```text
+    python3 src/pipeline.py
+```
+
+atau
+
+```text
+    python src/pipeline.py
+```
+
+## 11. Alur ETL
+
+
+```text
+EXTRACT
+Raw Data
+   ↓
+Load Data
+
+TRANSFORM
+   ↓
+Data Inspection
+   ↓
+Data Cleaning
+   ↓
+Data Transformation
+
+LOAD
+   ↓
+Processed CSV
+```
+
+Gambar tersebut menunjukkan **alur proses data (data pipeline)** dari data mentah hingga menjadi dataset yang siap digunakan.
+
+1. **Raw Data** : Data awal yang masih dalam kondisi mentah.
+2. **Load Data** : Data dimuat agar dapat diproses.
+3. **Data Inspection** : Melakukan pemeriksaan terhadap data untuk mengetahui struktur, tipe data, nilai kosong, dan potensi masalah.
+4. **Data Cleaning** : Melakukan pembersihan data, seperti menangani missing value, duplikasi, atau data yang tidak sesuai.
+5. **Data Transformation** : Data diubah ke format yang sesuai, misalnya melakukan **normalisasi data numerik** dan **encoding data kategorikal**.
+6. **Processed Dataset** : Hasil akhir berupa dataset yang telah dibersihkan dan ditransformasi sehingga siap digunakan untuk analisis atau proses machine learning.
+
+
+## 12. Output Processed Dataset
+
+File yang dihasilkan:
+
+`data/processed/automobileEDA_processed.csv`
+
+Dataset raw tetap berada di:
+
+`data/raw/automobileEDA_dirty_training.csv`
+
+dan tidak ditimpa oleh pipeline.
