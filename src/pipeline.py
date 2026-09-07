@@ -11,10 +11,6 @@ def extract_data() -> pd.DataFrame:
 
 def inspect_dataset(df: pd.DataFrame) -> None:
 
-    print("\n" + "=" * 60)
-    print("DATA INSPECTION")
-    print("=" * 60)
-
     print("\n5 baris pertama:")
     print(df.head())
 
@@ -231,14 +227,14 @@ def save_dataset(df: pd.DataFrame) -> None:
 
 def run_pipeline() -> None:
 
-    df = extract_data()
-    inspect_dataset(df)
-    cleaned = clean_data(df)
-    processed = transform_data(cleaned)
-    save_dataset(processed)
+    extract = extract_data()
+    inspect_dataset(extract)
+    cleaned = clean_data(extract)
+    transform = transform_data(cleaned)
+    save_dataset(transform)
 
-    print(f"Final shape: {processed.shape}")
-    print(f"Missing values: {processed.isna().sum().sum()}")
+    print(f"Final shape: {transform.shape}")
+    print(f"Missing values: {transform.isna().sum().sum()}")
 
 
 if __name__ == "__main__":
